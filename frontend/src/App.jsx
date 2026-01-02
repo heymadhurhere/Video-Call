@@ -7,12 +7,14 @@ import AppTheme from './shared-theme/AppTheme.jsx';
 import VideoMeetComponent from './pages/VideoMeet.jsx';
 import HomeComponent from './pages/home.jsx';
 import History from './pages/history.jsx';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 
 function App() {
 
   return (
    <>
+   <SpeedInsights />
    <AppTheme>
    <Router>
     <AuthProvider>
