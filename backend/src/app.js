@@ -1,5 +1,13 @@
 import express from 'express';
 import { createServer } from  "node:http";
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: join(__dirname, '../../.env') });
 
 import { Server } from "socket.io";
 
@@ -28,12 +36,11 @@ app.get("/home", (req, res) => {
 })
 
 const start = async () => {
-    const connectionDb = await mongoose.connect("mongodb+srv://anandmadhurrkm7_db_user:EchSkOFWjrkvOg9S@cluster0.lhdabph.mongodb.net/")
-
-    console.log(`MongoDB connected: ${connectionDb.connection.host}`); // Tells us the host name to which the mongoDb is connected
-     server.listen(app.get("port"), () => {
-        console.log("Server is running on port 8080");
-     })
+    const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}`;
+    await mongoose.connect(uri);
+    console.log(`MongoDB connected: ${mongoose.connection.host}`); // Tells us the host name to which the mongoDb is connected
+    server.listen(app.get("port"), () => {
+        console.log(`Server is running on port ${app.get("port")}`);
+    })
 }
-
 start();
