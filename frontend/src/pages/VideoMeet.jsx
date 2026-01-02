@@ -12,8 +12,9 @@ import ScreenShare from '@mui/icons-material/ScreenShareTwoTone';
 import ScreenShareOff from '@mui/icons-material/StopScreenShareTwoTone';
 import ChatIcon from '@mui/icons-material/Chat';
 
+import { IS_PROD, server } from "../environment";
 
-const server_url = "http://localhost:8080";
+const server_url = server;
 var connections = {};
 
 const peerConfigConnections = {
