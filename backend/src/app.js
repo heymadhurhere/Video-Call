@@ -38,7 +38,7 @@ app.get("/home", (req, res) => {
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
     res.redirect("/"); 
 });
 
