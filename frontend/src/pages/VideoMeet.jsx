@@ -11,6 +11,10 @@ import MicNoneTwoToneIcon from '@mui/icons-material/MicNoneTwoTone';
 import ScreenShare from '@mui/icons-material/ScreenShareTwoTone';
 import ScreenShareOff from '@mui/icons-material/StopScreenShareTwoTone';
 import ChatIcon from '@mui/icons-material/Chat';
+import PersonIcon from '@mui/icons-material/Person';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import '../App.css';
 
 import { IS_PROD, server } from "../environment";
 
@@ -420,63 +424,286 @@ export default function VideoMeetComponent() {
     return (
         <div>
             {askForUsername === true ?
-                <div>
-                    <h2>Enter into room</h2>
-                    <TextField id="outlined-basic" label="Username" value={username} onChange={e => setUsername(e.target.value)} variant="outlined" />
-                    <Button variant="contained" onClick={connect}>Connect</Button>
+                <div className="lobbyPageContainer">
+                    <div className="lobbyCard">
+                        <div className="lobbyHeader">
+                            <div className="lobbyIconCircle">
+                                <PersonIcon sx={{ fontSize: '2.2rem', color: '#FF9839' }} />
+                            </div>
+                            <h2 className="lobbyTitle">Join Meeting</h2>
+                            <p className="lobbySubtext">Enter your display name to continue</p>
+                        </div>
 
-                    <div>
-                        <video ref={localVideoRef} autoPlay muted ></video>
+                        <div className="lobbyForm">
+                            <TextField
+                                id="lobby-username"
+                                placeholder="Your display name"
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
+                                variant="outlined"
+                                fullWidth
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        backgroundColor: 'rgba(255,255,255,0.05)',
+                                        borderRadius: '14px',
+                                        color: '#fff',
+                                        fontSize: '1rem',
+                                        '& fieldset': {
+                                            borderColor: 'rgba(255,255,255,0.12)',
+                                            transition: 'border-color 0.3s ease',
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'rgba(255,152,57,0.4)',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#FF9839',
+                                            boxShadow: '0 0 0 3px rgba(255,152,57,0.1)',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        padding: '14px 18px',
+                                        '&::placeholder': {
+                                            color: 'rgba(255,255,255,0.35)',
+                                            opacity: 1,
+                                        },
+                                    },
+                                }}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={connect}
+                                fullWidth
+                                sx={{
+                                    background: 'linear-gradient(135deg, #FF9839 0%, #ff5e62 100%)',
+                                    color: '#fff',
+                                    fontWeight: 600,
+                                    fontSize: '1.05rem',
+                                    padding: '14px',
+                                    borderRadius: '14px',
+                                    textTransform: 'none',
+                                    boxShadow: '0 8px 25px rgba(255,152,57,0.3)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        background: 'linear-gradient(135deg, #e68933 0%, #e65050 100%)',
+                                        transform: 'translateY(-2px)',
+                                        boxShadow: '0 12px 35px rgba(255,152,57,0.4)',
+                                    },
+                                }}
+                            >
+                                Connect
+                            </Button>
+                        </div>
+
+                        <div className="lobbyVideoPreview">
+                            <video ref={localVideoRef} autoPlay muted></video>
+                        </div>
                     </div>
-
                 </div> :
                 <div className={styles.meetVideoContainer}>
 
                     {showModal ? <div className={styles.chatRoom}>
                         <div className={styles.chatContainer}>
-                            <h1>Chat</h1>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: '18px 24px 14px',
+                                borderBottom: '1px solid rgba(255,255,255,0.06)',
+                                flexShrink: 0,
+                            }}>
+                                <h1 style={{
+                                    margin: 0,
+                                    fontSize: '1.3rem',
+                                    fontWeight: 700,
+                                    color: '#fff',
+                                    padding: 0,
+                                    border: 'none',
+                                }}>Chat</h1>
+                                <IconButton
+                                    onClick={() => { setModal(false); }}
+                                    sx={{
+                                        color: 'rgba(255,255,255,0.5)',
+                                        '&:hover': { color: '#ff5e62', background: 'rgba(255,94,98,0.1)' },
+                                    }}
+                                    size="small"
+                                >
+                                    <CloseRoundedIcon />
+                                </IconButton>
+                            </div>
 
                             <div className={styles.chattingDisplay}>
 
                                 {messages.length > 0 ? messages.map((item, index) => {
                                     return (
-                                        <div style={{ marginBottom: "20px" }} key={index}>
-                                            <p style={{ fontWeight: "bold" }}>{item.sender}</p>
-                                            <p>{item.data}</p>
+                                        <div key={index} style={{
+                                            padding: '10px 14px',
+                                            background: 'rgba(255,255,255,0.04)',
+                                            borderRadius: '12px',
+                                            border: '1px solid rgba(255,255,255,0.05)',
+                                        }}>
+                                            <p style={{
+                                                fontWeight: 600,
+                                                fontSize: '0.85rem',
+                                                color: '#FF9839',
+                                                margin: '0 0 4px 0',
+                                            }}>{item.sender}</p>
+                                            <p style={{
+                                                margin: 0,
+                                                fontSize: '0.9rem',
+                                                color: 'rgba(255,255,255,0.85)',
+                                                lineHeight: 1.5,
+                                            }}>{item.data}</p>
                                         </div>
                                     )
-                                }) : <p>Start a conversation</p>}
+                                }) : <p style={{
+                                    color: 'rgba(255,255,255,0.3)',
+                                    textAlign: 'center',
+                                    marginTop: '2rem',
+                                    fontSize: '0.9rem',
+                                }}>Start a conversation</p>}
 
                             </div>
                             <div className={styles.chattingArea}>
-
-                                <TextField value={message} onChange={(e) => setMessage(e.target.value)} id="outlined-basic" label="Enter your message" variant="outlined" />
-                                <Button onClick={sendMessage} variant="contained">Send</Button>
+                                <TextField
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    onKeyDown={(e) => { if (e.key === 'Enter') sendMessage(); }}
+                                    id="chat-input"
+                                    placeholder="Type a message..."
+                                    variant="outlined"
+                                    fullWidth
+                                    size="small"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            backgroundColor: 'rgba(255,255,255,0.05)',
+                                            borderRadius: '12px',
+                                            color: '#fff',
+                                            fontSize: '0.9rem',
+                                            '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                                            '&:hover fieldset': { borderColor: 'rgba(255,152,57,0.3)' },
+                                            '&.Mui-focused fieldset': { borderColor: '#FF9839' },
+                                        },
+                                        '& .MuiInputBase-input::placeholder': {
+                                            color: 'rgba(255,255,255,0.3)',
+                                            opacity: 1,
+                                        },
+                                    }}
+                                />
+                                <IconButton
+                                    onClick={sendMessage}
+                                    sx={{
+                                        background: 'linear-gradient(135deg, #FF9839, #ff5e62)',
+                                        color: '#fff',
+                                        borderRadius: '12px',
+                                        width: '42px',
+                                        height: '42px',
+                                        flexShrink: 0,
+                                        '&:hover': {
+                                            background: 'linear-gradient(135deg, #e68933, #e65050)',
+                                        },
+                                    }}
+                                >
+                                    <SendRoundedIcon fontSize="small" />
+                                </IconButton>
                             </div>
                         </div>
                     </div> : <></>}
 
 
                     <div className={styles.buttonContainers}>
-                        <IconButton onClick={handleVideo} style={{ color: "white" }}>
-                            {(video === true) ? <VideocamTwoToneIcon /> : <VideocamOffTwoToneIcon />}
+                        <IconButton
+                            onClick={handleVideo}
+                            sx={{
+                                color: video ? '#fff' : '#ff5e62',
+                                background: video ? 'rgba(255,255,255,0.08)' : 'rgba(255,94,98,0.15)',
+                                borderRadius: '14px',
+                                width: '52px',
+                                height: '52px',
+                                transition: 'all 0.2s ease',
+                                '&:hover': { background: video ? 'rgba(255,255,255,0.14)' : 'rgba(255,94,98,0.25)' },
+                            }}
+                        >
+                            {video ? <VideocamTwoToneIcon /> : <VideocamOffTwoToneIcon />}
                         </IconButton>
 
-                        <IconButton onClick={handleEndCall} style={{ color: "red" }}>
+                        <IconButton
+                            onClick={handlleAudio}
+                            sx={{
+                                color: audio ? '#fff' : '#ff5e62',
+                                background: audio ? 'rgba(255,255,255,0.08)' : 'rgba(255,94,98,0.15)',
+                                borderRadius: '14px',
+                                width: '52px',
+                                height: '52px',
+                                transition: 'all 0.2s ease',
+                                '&:hover': { background: audio ? 'rgba(255,255,255,0.14)' : 'rgba(255,94,98,0.25)' },
+                            }}
+                        >
+                            {audio ? <MicNoneTwoToneIcon /> : <MicOffTwoToneIcon />}
+                        </IconButton>
+
+                        <IconButton
+                            onClick={handleEndCall}
+                            sx={{
+                                background: 'linear-gradient(135deg, #ff5e62, #d63031)',
+                                color: '#fff',
+                                borderRadius: '14px',
+                                width: '56px',
+                                height: '56px',
+                                boxShadow: '0 4px 18px rgba(255,94,98,0.35)',
+                                transition: 'all 0.2s ease',
+                                '&:hover': {
+                                    background: 'linear-gradient(135deg, #e64c50, #b52828)',
+                                    transform: 'scale(1.05)',
+                                },
+                            }}
+                        >
                             <CallEndTwoToneIcon />
                         </IconButton>
 
-                        <IconButton onClick={handlleAudio} style={{ color: "white" }}>
-                            {(audio === true) ? <MicNoneTwoToneIcon /> : <MicOffTwoToneIcon />}
-                        </IconButton>
-
                         {screenAvailable === true ?
-                            <IconButton onClick={handleScreen} style={{ color: "white" }}>
-                                {screen === true ? <ScreenShare /> : <ScreenShareOff />}
+                            <IconButton
+                                onClick={handleScreen}
+                                sx={{
+                                    color: screen ? '#FF9839' : '#fff',
+                                    background: screen ? 'rgba(255,152,57,0.15)' : 'rgba(255,255,255,0.08)',
+                                    borderRadius: '14px',
+                                    width: '52px',
+                                    height: '52px',
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': { background: screen ? 'rgba(255,152,57,0.25)' : 'rgba(255,255,255,0.14)' },
+                                }}
+                            >
+                                {screen ? <ScreenShare /> : <ScreenShareOff />}
                             </IconButton> : <></>}
 
-                        <Badge badgeContent={newMessages} max={999} color="secondary">
-                            <IconButton onClick={() =>{ setModal(!showModal); setNewMessages(0);} } style={{ color: "white" }}>
+                        <Badge
+                            badgeContent={newMessages}
+                            max={99}
+                            sx={{
+                                '& .MuiBadge-badge': {
+                                    background: 'linear-gradient(135deg, #FF9839, #ff5e62)',
+                                    color: '#fff',
+                                    fontWeight: 700,
+                                    fontSize: '0.7rem',
+                                    minWidth: '20px',
+                                    height: '20px',
+                                    borderRadius: '10px',
+                                    boxShadow: '0 2px 8px rgba(255,152,57,0.4)',
+                                },
+                            }}
+                        >
+                            <IconButton
+                                onClick={() => { setModal(!showModal); setNewMessages(0); }}
+                                sx={{
+                                    color: showModal ? '#FF9839' : '#fff',
+                                    background: showModal ? 'rgba(255,152,57,0.15)' : 'rgba(255,255,255,0.08)',
+                                    borderRadius: '14px',
+                                    width: '52px',
+                                    height: '52px',
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': { background: showModal ? 'rgba(255,152,57,0.25)' : 'rgba(255,255,255,0.14)' },
+                                }}
+                            >
                                 <ChatIcon />
                             </IconButton>
                         </Badge>

@@ -2,11 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
-import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -15,29 +12,67 @@ import { styled } from '@mui/material/styles';
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 
-//import ForgotPassword from './ForgotPassword';
-//import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
 import { Snackbar } from '@mui/material';
+import '../App.css';
 
-const Card = styled(MuiCard)(({ theme }) => ({
+const Card = styled(MuiCard)(() => ({
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'center',
     width: '100%',
-    padding: theme.spacing(4),
-    gap: theme.spacing(2),
-    boxShadow:
-        'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-    [theme.breakpoints.up('sm')]: {
-        width: '450px',
-    },
-    ...theme.applyStyles('dark', {
-        boxShadow:
-            'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-    }),
+    maxWidth: '460px',
+    padding: '2.5rem',
+    gap: '1.5rem',
+    background: 'rgba(255, 255, 255, 0.04)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    borderRadius: '24px',
+    boxShadow: '0 25px 60px rgba(0, 0, 0, 0.4), 0 0 80px rgba(255, 152, 57, 0.06)',
+    animation: 'fadeIn 0.8s ease-out',
 }));
+
+// Shared sx for text fields
+const textFieldSx = {
+    '& .MuiOutlinedInput-root': {
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '12px',
+        color: '#fff',
+        transition: 'all 0.3s ease',
+        '& fieldset': {
+            borderColor: 'rgba(255, 255, 255, 0.12)',
+            transition: 'border-color 0.3s ease',
+        },
+        '&:hover fieldset': {
+            borderColor: 'rgba(255, 152, 57, 0.4)',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: '#FF9839',
+            boxShadow: '0 0 0 3px rgba(255, 152, 57, 0.1)',
+        },
+    },
+    '& .MuiInputBase-input': {
+        color: '#fff',
+        fontSize: '0.95rem',
+        '&::placeholder': {
+            color: 'rgba(255, 255, 255, 0.35)',
+            opacity: 1,
+        },
+    },
+    '& .MuiFormHelperText-root': {
+        color: '#ff6b6b',
+    },
+};
+
+const formLabelSx = {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontWeight: 500,
+    fontSize: '0.9rem',
+    mb: 0.5,
+    '&.Mui-focused': {
+        color: '#FF9839',
+    },
+};
 
 export default function AuthenticationPage() {
     const [emailError, setEmailError] = React.useState(false);
@@ -119,154 +154,214 @@ export default function AuthenticationPage() {
     };
 
     return (
-        <Card variant="outlined">
-            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                {/* <SitemarkIcon /> */}
-            </Box>
-            
-            <Typography
-                component="h1"
-                variant="h4"
-                sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-            >
-                Sign in
-            </Typography>
-            <Box
-                component="form"
-                noValidate
-                sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
-            >
+        <div className="authPageContainer">
+            <Card variant="outlined">
+                {/* Header */}
+                <Box sx={{ textAlign: 'center', mb: 1 }}>
+                    <Typography
+                        sx={{
+                            fontSize: '1.5rem',
+                            fontWeight: 700,
+                            background: 'linear-gradient(90deg, #FF9839, #ff5e62)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            mb: 0.5,
+                            letterSpacing: '-0.3px',
+                        }}
+                    >
+                        Video Conferencing
+                    </Typography>
+                    <Typography
+                        component="h1"
+                        sx={{
+                            fontSize: 'clamp(1.6rem, 4vw, 2rem)',
+                            fontWeight: 700,
+                            color: '#fff',
+                        }}
+                    >
+                        {formState === 0 ? 'Welcome Back' : 'Create Account'}
+                    </Typography>
+                    <Typography
+                        sx={{
+                            fontSize: '0.9rem',
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            mt: 0.5,
+                        }}
+                    >
+                        {formState === 0 ? 'Sign in to continue your journey' : 'Get started with a free account'}
+                    </Typography>
+                </Box>
+
+                <Box
+                    component="form"
+                    noValidate
+                    sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
+                >
+
+                    {formState === 1 ?
+                        <FormControl>
+                            <FormLabel htmlFor="fullName" sx={formLabelSx}>Full Name</FormLabel>
+                            <TextField
+                                error={emailError}
+                                helperText={emailErrorMessage}
+                                id="fullName"
+                                type="string"
+                                name="fullName"
+                                placeholder="Enter your full name"
+                                autoFocus
+                                required
+                                fullWidth
+                                variant="outlined"
+                                color={emailError ? 'error' : 'primary'}
+                                sx={textFieldSx}
+                                onChange={(e) => setName(e.target.value)}
+                            /> </FormControl> : <></>}
 
 
-                {formState === 1 ?
+
                     <FormControl>
-                        <FormLabel htmlFor="username">Full Name</FormLabel>
+                        <FormLabel htmlFor="username" sx={formLabelSx}>Username</FormLabel>
                         <TextField
                             error={emailError}
                             helperText={emailErrorMessage}
-                            id="fullName"
+                            id="username"
                             type="string"
-                            name="fullName"
-                            placeholder="Full Name"
+                            name="username"
+                            placeholder="Enter your username"
                             autoFocus
                             required
                             fullWidth
                             variant="outlined"
                             color={emailError ? 'error' : 'primary'}
-                            sx={{ ariaLabel: 'username' }}
-                            onChange={(e) => setName(e.target.value)}
-                        /> </FormControl> : <></>}
+                            sx={textFieldSx}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <FormLabel htmlFor="password" sx={formLabelSx}>Password</FormLabel>
+                            {formState === 0 && (
+                                <Link
+                                    component="button"
+                                    type="button"
+                                    onClick={handleClickOpen}
+                                    variant="body2"
+                                    sx={{
+                                        color: '#FF9839',
+                                        textDecoration: 'none',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 500,
+                                        '&:hover': {
+                                            color: '#ff5e62',
+                                            textDecoration: 'none',
+                                        },
+                                    }}
+                                >
+                                </Link>
+                            )}
+                        </Box>
+                        <TextField
+                            error={passwordError}
+                            helperText={passwordErrorMessage}
+                            name="password"
+                            placeholder="••••••••"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            required
+                            fullWidth
+                            variant="outlined"
+                            color={passwordError ? 'error' : 'primary'}
+                            sx={textFieldSx}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        {error && (
+                            <Typography sx={{
+                                color: '#ff6b6b',
+                                fontSize: '0.85rem',
+                                mt: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                            }}>
+                                ⚠ {error}
+                            </Typography>
+                        )}
+                    </FormControl>
 
-
-
-                <FormControl>
-                    <FormLabel htmlFor="username">Username</FormLabel>
-                    <TextField
-                        error={emailError}
-                        helperText={emailErrorMessage}
-                        id="username"
-                        type="string"
-                        name="username"
-                        placeholder="username"
-                        autoFocus
-                        required
+                    <Button
+                        type="button"
                         fullWidth
-                        variant="outlined"
-                        color={emailError ? 'error' : 'primary'}
-                        sx={{ ariaLabel: 'username' }}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </FormControl>
-                <FormControl>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <FormLabel htmlFor="password">Password</FormLabel>
-                        <Link
-                            component="button"
-                            type="button"
-                            onClick={handleClickOpen}
-                            variant="body2"
-                            sx={{ alignSelf: 'baseline' }}
-                        >
-                            Forgot your password?
-                        </Link>
-                    </Box>
-                    <TextField
-                        error={passwordError}
-                        helperText={passwordErrorMessage}
-                        name="password"
-                        placeholder="••••••"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        autoFocus
-                        required
-                        fullWidth
-                        variant="outlined"
-                        color={passwordError ? 'error' : 'primary'}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <p style={{color: "red"}}>{error}</p>
-                </FormControl>
-                {formState === 1 ? <Button type="button" fullWidth variant="contained" onClick={handleAuth}>
-                    Sign up
-                </Button> : <Button type="button" fullWidth variant="contained" onClick={handleAuth}>
-                    Sign in
-                </Button>}
+                        variant="contained"
+                        onClick={handleAuth}
+                        sx={{
+                            background: 'linear-gradient(135deg, #FF9839 0%, #ff5e62 100%)',
+                            color: '#fff',
+                            fontWeight: 600,
+                            fontSize: '1rem',
+                            padding: '0.85rem',
+                            borderRadius: '12px',
+                            textTransform: 'none',
+                            boxShadow: '0 8px 25px rgba(255, 152, 57, 0.3)',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                                background: 'linear-gradient(135deg, #e68933 0%, #e65050 100%)',
+                                transform: 'translateY(-2px)',
+                                boxShadow: '0 12px 35px rgba(255, 152, 57, 0.4)',
+                            },
+                        }}
+                    >
+                        {formState === 0 ? 'Sign In' : 'Create Account'}
+                    </Button>
 
-                {formState === 0 ? <Typography sx={{ textAlign: 'center' }}>
-                    Don&apos;t have an account?{' '}
-                    <span>
-                        <Link
-                            variant="body2"
-                            sx={{ alignSelf: 'center' }}
-                            component="button"
-                            type="button"
-                            onClick={() => setFormState(1)}
-                        >
-                            Sign up
-                        </Link>
-                    </span>
-                </Typography> : <Typography sx={{ textAlign: 'center' }}>
-                    Already have an account?{' '}
-                    <span>
-                        <Link
-                            variant="body2"
-                            sx={{ alignSelf: 'center' }}
-                            component="button"
-                            type="button"
-                            onClick={() => setFormState(0)}
-                        >
-                            Sign in
-                        </Link>
-                    </span>
-                </Typography>}
+                    {formState === 0 ? <Typography sx={{ textAlign: 'center', color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem' }}>
+                        Don&apos;t have an account?{' '}
+                        <span>
+                            <Link
+                                variant="body2"
+                                sx={{
+                                    color: '#FF9839',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    textDecoration: 'none',
+                                    '&:hover': { color: '#ff5e62', textDecoration: 'underline' },
+                                }}
+                                component="button"
+                                type="button"
+                                onClick={() => setFormState(1)}
+                            >
+                                Sign up
+                            </Link>
+                        </span>
+                    </Typography> : <Typography sx={{ textAlign: 'center', color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem' }}>
+                        Already have an account?{' '}
+                        <span>
+                            <Link
+                                variant="body2"
+                                sx={{
+                                    color: '#FF9839',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    textDecoration: 'none',
+                                    '&:hover': { color: '#ff5e62', textDecoration: 'underline' },
+                                }}
+                                component="button"
+                                type="button"
+                                onClick={() => setFormState(0)}
+                            >
+                                Sign in
+                            </Link>
+                        </span>
+                    </Typography>}
 
-            </Box>
-            <Divider>or</Divider>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={() => alert('Sign in with Google')}
-                    startIcon={<GoogleIcon />}
-                >
-                    Sign in with Google
-                </Button>
-                <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={() => alert('Sign in with Facebook')}
-                    startIcon={<FacebookIcon />}
-                >
-                    Sign in with Facebook
-                </Button>
-            </Box>
-            <Snackbar
-                open={open}
-                autoHideDuration={4000}
-                onClose={handleClose}
-                message={messages}
-            />
-        </Card>
+                </Box>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={4000}
+                    onClose={handleClose}
+                    message={messages}
+                />
+            </Card>
+        </div>
     );
 }
