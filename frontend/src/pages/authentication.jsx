@@ -214,6 +214,7 @@ export default function AuthenticationPage() {
                                 variant="outlined"
                                 color={emailError ? 'error' : 'primary'}
                                 sx={textFieldSx}
+                                value={name}
                                 onChange={(e) => setName(e.target.value)}
                             /> </FormControl> : <></>}
 
@@ -234,6 +235,7 @@ export default function AuthenticationPage() {
                             variant="outlined"
                             color={emailError ? 'error' : 'primary'}
                             sx={textFieldSx}
+                            value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </FormControl>
@@ -273,6 +275,7 @@ export default function AuthenticationPage() {
                             variant="outlined"
                             color={passwordError ? 'error' : 'primary'}
                             sx={textFieldSx}
+                            value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         {error && (
