@@ -1,3 +1,4 @@
+import path from "path";
 import express from 'express';
 import { createServer } from  "node:http";
 import dotenv from 'dotenv';
@@ -34,6 +35,12 @@ app.use("/api/v1/users", userRoutes);
 app.get("/home", (req, res) => {
     return res.json({"hello": "world"});
 })
+
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+
+app.get("*", (req, res) => {
+    res.redirect("/"); 
+});
 
 const start = async () => {
     const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}`;

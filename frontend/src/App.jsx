@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from './pages/landing.jsx';
 import AuthenticationPage from './pages/authentication.jsx';
 import AuthProvider from './contexts/AuthContext.jsx';
@@ -24,6 +24,8 @@ function App() {
       <Route path="/home" element={<HomeComponent/>}/>
       <Route path="/history" element={<History/>}/> 
       <Route path="/:url" element={<VideoMeetComponent/>}/>
+
+      <Route path="*" element={<Navigate to="/" />} />
 
     </Routes>
     </AuthProvider>
