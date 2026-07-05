@@ -26,7 +26,11 @@ export default function AuthProvider({ children }) {
                 username: userName,
                 password: password
             })
-            // Always return the message from the API (success or error)
+
+            if (request.status === httpStatus.CREATED && request.data.token) {
+                localStorage.setItem("token", request.data.token);
+                navigate("/home");
+            }
             return request.data.message;
         } catch(err) {
             // Re-throw the error so it can be handled in the component

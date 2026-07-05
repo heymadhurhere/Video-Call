@@ -99,15 +99,11 @@ export default function AuthenticationPage() {
                 
             }
 
-            if (formState === 1) { // register
+            if (formState === 1) { // register — handleRegister stores the token and navigates to /home
                 let result = await handleRegister(name, username, password);
-                console.log(result);
                 setMessages(result);
                 setOpen(true);
                 setError(''); // Clear error on success
-                setFormState(0);
-                setPassword('');
-                setUsername('');
             }
         }
         catch(err) {
