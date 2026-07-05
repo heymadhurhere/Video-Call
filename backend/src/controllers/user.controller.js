@@ -46,15 +46,17 @@ const register = async (req, res) => {
         // register new user
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        const token = crypto.randomBytes(20).toString('hex'); // log the user in right away
+
         const newUser = new User({
             name: name,
             username: username,
-            password: hashedPassword
-        
+            password: hashedPassword,
+            token: token
         });
 
         await newUser.save(); // saves new user to database
-        res.status(httpStatus.CREATED).json({ message: "User registered successfully" });
+        res.status(httpStatus.CREATED).json({ message: "User registered successfully", token: token });
     } catch(e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
     }
