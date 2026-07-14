@@ -505,7 +505,7 @@ Navigate to `http://localhost:5173` — you'll see the landing page.
 
 ---
 
-<!-- ## 🎓 Key Concepts & Interview Topics
+## 🎓 Key Concepts & Interview Topics
 
 ### WebRTC
 - **What is WebRTC?** Browser API for peer-to-peer real-time communication (video, audio, data) without plugins.
@@ -589,6 +589,6 @@ Navigate to `http://localhost:5173` — you'll see the landing page.
 
 ISC
 
---- -->
+---
 
 *Built with ❤️ using React, Node.js, WebRTC, and Socket.IO*
