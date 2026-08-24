@@ -73,6 +73,10 @@ A full-stack, real-time video conferencing application built with **React**, **N
 | **http-status** | HTTP status code constants for clean response handling |
 | **nodemon** | Auto-restart dev server on file changes |
 
+
+<p align="center">
+  <img width="924" height="519" alt="Application Interface" src="https://github.com/user-attachments/assets/dbf133f2-8ac6-46d4-88bb-c901e54c6763" />
+</p>
 ---
 
 ## 🏗 Architecture Overview
