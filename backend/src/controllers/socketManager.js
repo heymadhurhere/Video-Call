@@ -32,7 +32,7 @@ export const connectToSocket = (server) => {
 
             if (messages[path] !== undefined) {
                 for (let b = 0; b < messages[path].length; b++) {
-                    socket.emit("chat-message", messages[path][b]['data'], messages[path][b]['sender']), messages[path][b]['socket-id-sender'];
+                    socket.emit("chat-message", messages[path][b]['data'], messages[path][b]['sender'], messages[path][b]['socket-id-sender']);
                 }
             }
 
@@ -69,8 +69,10 @@ export const connectToSocket = (server) => {
         socket.on("disconnect", () => {
 
             var diffTime = Math.abs(timeOnline[socket.id] - Date.now()); // tells how long user was online in milliseconds
+            delete timeOnline[socket.id]; // prevent memory leak — remove entry once socket disconnects
+
             var key
-            for (const [k, v] of JSON.parse(JSON.stringify(Object.entries(connections)))) {
+            for (const [k, v] of Object.entries(connections)) { // Object.entries() already gives a safe snapshot — no need for deep clone
                 if (v.includes(socket.id)) {
                     key = k
                     
